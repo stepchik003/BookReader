@@ -11,6 +11,9 @@ sealed interface AppRoute {
     data object HomeGraph : AppRoute
 
     @Serializable
+    data object LoadingScreen : AppRoute
+
+    @Serializable
     data object LoginScreen : AppRoute
 
     @Serializable
