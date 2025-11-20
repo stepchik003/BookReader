@@ -23,3 +23,4 @@ rootProject.name = "Book Reader"
 include(":app")
 include(":core:data")
 include(":core:domain")
+include(":core:navigation")
