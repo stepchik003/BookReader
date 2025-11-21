@@ -1,18 +1,15 @@
 package com.example.bookreader.navigation
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -20,6 +17,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
@@ -27,70 +26,39 @@ import androidx.navigation.compose.rememberNavController
 import com.example.auth.mvi.AuthState
 import com.example.auth.presentation.LoginScreen
 import com.example.auth.viewmodel.AuthViewModel
+import com.example.bookreader.presentation.BookReaderBottomBar
 import com.example.navigation.AppRoute
+import com.example.navigation.AuthRoute
+import com.example.navigation.HomeRoute
+import com.example.navigation.ReaderRoute
 
 @Composable
 fun AppNavGraph(
     authViewModel: AuthViewModel = hiltViewModel()
 ) {
     val navController = rememberNavController()
-    val snackbarHostState = remember { SnackbarHostState() }
+    val snackBarHostState = remember { SnackbarHostState() }
 
     val authState by authViewModel.state.collectAsState()
 
-    val currentGraph = when (authState) {
-        is AuthState.Loading -> AppRoute.LoadingScreen
-        is AuthState.LoggedIn -> AppRoute.HomeGraph
-        is AuthState.LoggedOut -> AppRoute.AuthGraph
-    }
-
-    if (authState is AuthState.Loading) {
-        LoadingScreen()
-        return
-    }
-
-    LaunchedEffect(currentGraph) {
-        if (currentGraph != AppRoute.LoadingScreen) {
-            navController.navigate(currentGraph) {
-                popUpTo(navController.graph.id) {
-                    inclusive = true
-                }
-            }
+    val startDestination = remember(authState) {
+        when (authState) {
+            is AuthState.Loading -> AppRoute.Loading
+            is AuthState.LoggedIn -> AppRoute.HomeGraph
+            is AuthState.LoggedOut -> AppRoute.AuthGraph
         }
     }
+
 
     NavHost(
         navController = navController,
-        startDestination = AppRoute.LoadingScreen
+        startDestination = startDestination
     ) {
+        composable<AppRoute.Loading> { LoadingScreen() }
 
-        composable<AppRoute.LoadingScreen> {
-            LoadingScreen()
-        }
-
-        composable<AppRoute.HomeGraph> {
-            HomeScreen(authState as AuthState.LoggedIn)
-        }
-
-        navigation<AppRoute.AuthGraph>(
-            startDestination = AppRoute.LoginScreen
-        ) {
-            composable<AppRoute.LoginScreen> {
-                LoginScreen(
-                    viewModel = authViewModel,
-                    onNavigateToHome = {
-                        navController.navigate(AppRoute.HomeGraph) {
-                            popUpTo(AppRoute.AuthGraph) { inclusive = true }
-                        }
-                    },
-                    snackbarHostState = snackbarHostState
-                )
-            }
-
-            composable<AppRoute.RegisterScreen> {
-                Text("Экран регистрации", modifier = Modifier.fillMaxSize().wrapContentSize(Alignment.Center))
-            }
-        }
+        authGraph(navController, authViewModel, snackBarHostState)
+        homeGraph(navController, authViewModel)
+        readerGraph(navController)
     }
 }
 
@@ -104,15 +72,105 @@ fun LoadingScreen() {
     }
 }
 
-
-@Composable
-fun HomeScreen(state: AuthState.LoggedIn) {
-    Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+fun NavGraphBuilder.authGraph(
+    navController: NavController,
+    authViewModel: AuthViewModel,
+    snackBarHostState: SnackbarHostState
+) {
+    navigation<AppRoute.AuthGraph>(
+        startDestination = AuthRoute.LoginScreen
     ) {
-        Text("Добро пожаловать в Home!", style = MaterialTheme.typography.headlineMedium)
-        Text("Email: ${state.user.email}", style = MaterialTheme.typography.bodyLarge)
+
+        composable<AuthRoute.LoginScreen> {
+            LoginScreen(
+                viewModel = authViewModel,
+                onNavigateToRegister = { navController.navigate(AuthRoute.RegisterScreen) },
+                onNavigateToHome = {
+                    navController.navigate(AppRoute.HomeGraph) {
+                        popUpTo(AppRoute.AuthGraph) { inclusive = true }
+                    }
+                },
+                snackbarHostState = snackBarHostState
+            )
+        }
+
+        composable<AuthRoute.RegisterScreen> {
+//            RegisterScreen(
+//                onNavigateToLogin = { navController.popBackStack() },
+//                onSignUpComplete = {
+//                    navController.navigate(AppRoute.HomeGraph) {
+//                        popUpTo(AppRoute.AuthGraph) { inclusive = true }
+//                    }
+//                }
+//            )
+        }
+    }
+}
+
+fun NavGraphBuilder.homeGraph(
+    parentNavController: NavController,
+    authViewModel: AuthViewModel
+) {
+    navigation<AppRoute.HomeGraph>(
+        startDestination = AppRoute.HomeRoot
+    ) {
+
+        composable<AppRoute.HomeRoot> {
+            val tabNavController = rememberNavController()
+
+            Scaffold(
+                bottomBar = { BookReaderBottomBar(tabNavController) }
+            ) { padding ->
+
+                NavHost(
+                    navController = tabNavController,
+                    startDestination = HomeRoute.Books,
+                    modifier = Modifier.padding(padding)
+                ) {
+
+                    composable<HomeRoute.Books> {
+                        Text("Books")
+//                        Books(
+//                            onBookClick = { id ->
+//                                parentNavController.navigate(ReaderRoute.BookReader(id))
+//                            }
+//                        )
+                    }
+
+                    composable<HomeRoute.Upload> {
+                        //Upload()
+                        Text("Upload")
+                    }
+
+                    composable<HomeRoute.Profile> {
+                        Text("Profile")
+                        Button(onClick = {
+                            parentNavController.navigate(AppRoute.AuthGraph) {
+                                popUpTo(AppRoute.HomeGraph) { inclusive = true }
+                            }
+                        }) {
+                            Text("Log Out")
+                        }
+//                        Profile(
+//                            onLogout = {
+//                                parentNavController.navigate(AppRoute.AuthGraph) {
+//                                    popUpTo(AppRoute.HomeGraph) { inclusive = true }
+//                                }
+//                            }
+//                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+fun NavGraphBuilder.readerGraph(
+    navController: NavController
+) {
+    composable<ReaderRoute.BookReader> { entry ->
+        val bookId = entry.arguments?.getString("bookId")!!
+        //BookReaderScreen(bookId = bookId)
+        Text("book $bookId")
     }
 }

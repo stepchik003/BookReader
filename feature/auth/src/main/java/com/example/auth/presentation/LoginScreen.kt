@@ -42,6 +42,7 @@ import com.example.auth.viewmodel.AuthViewModel
 @Composable
 fun LoginScreen(
     viewModel: AuthViewModel,
+    onNavigateToRegister: () -> Unit,
     onNavigateToHome: () -> Unit,
     snackbarHostState: SnackbarHostState
 ) {
