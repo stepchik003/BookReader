@@ -5,11 +5,14 @@ import kotlinx.serialization.Serializable
 sealed interface AppRoute {
 
     @Serializable
-    data object LoadingScreen : AppRoute
+    data object Loading : AppRoute
     @Serializable
     data object AuthGraph : AppRoute
     @Serializable
-    data object MainContentGraph : AppRoute
+    data object HomeGraph : AppRoute
+
+    @Serializable
+    data object HomeRoot : AppRoute
 
 }
 sealed interface AuthRoute : AppRoute {
@@ -19,19 +22,19 @@ sealed interface AuthRoute : AppRoute {
     data object RegisterScreen : AuthRoute
 }
 
-sealed interface MainContentRoute : AppRoute {
+sealed interface HomeRoute : AppRoute {
     @Serializable
-    data object BooksScreen : MainContentRoute
+    data object Books : HomeRoute
     @Serializable
-    data object UploadScreen : MainContentRoute
+    data object Upload : HomeRoute
     @Serializable
-    data object ProfileScreen : MainContentRoute
+    data object Profile : HomeRoute
 }
 
 
 sealed interface ReaderRoute : AppRoute {
     @Serializable
-    data class BookReaderScreen(val bookId: String) : ReaderRoute
+    data class BookReader(val bookId: String) : ReaderRoute
 }
 
 sealed interface ProfileRoute : AppRoute {
