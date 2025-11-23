@@ -31,6 +31,7 @@ import com.example.navigation.AppRoute
 import com.example.navigation.AuthRoute
 import com.example.navigation.HomeRoute
 import com.example.navigation.ReaderRoute
+import com.example.upload.presentation.UploadScreen
 
 @Composable
 fun AppNavGraph(
@@ -138,8 +139,7 @@ fun NavGraphBuilder.homeGraph(
                     }
 
                     composable<HomeRoute.Upload> {
-                        //Upload()
-                        Text("Upload")
+                        UploadScreen()
                     }
 
                     composable<HomeRoute.Profile> {

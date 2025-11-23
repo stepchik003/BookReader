@@ -113,7 +113,7 @@ class AuthViewModel @Inject constructor(
                 is AppResult.Error -> {
                     val msg = result.message
                     updateLoggedOutState { it.copy(isLoading = false, error = msg) }
-                    sendEffect(AuthEffect.ShowSnackbar(msg ?: ""))
+                    sendEffect(AuthEffect.ShowSnackBar(msg ?: ""))
                 }
             }
         }
