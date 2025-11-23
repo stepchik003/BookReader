@@ -18,8 +18,6 @@ sealed interface AppRoute {
 sealed interface AuthRoute : AppRoute {
     @Serializable
     data object LoginScreen : AuthRoute
-    @Serializable
-    data object RegisterScreen : AuthRoute
 }
 
 sealed interface HomeRoute : AppRoute {
@@ -37,7 +35,3 @@ sealed interface ReaderRoute : AppRoute {
     data class BookReader(val bookId: String, val localPath: String, val bookTitle: String) : ReaderRoute
 }
 
-sealed interface ProfileRoute : AppRoute {
-    @Serializable
-    data object SettingsScreen : ProfileRoute
-}

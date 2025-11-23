@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile">Профиль</string>
+    <string name="name">Имя: </string>
+    <string name="email">Email: </string>
+    <string name="no_user_data">Нет данных пользователя</string>
+    <string name="logout">Выйти из аккаунта</string>
+    <string name="no_info">Не указано</string>
+</resources>

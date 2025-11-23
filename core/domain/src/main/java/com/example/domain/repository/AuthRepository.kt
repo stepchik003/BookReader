@@ -11,7 +11,9 @@ interface AuthRepository {
 
     suspend fun login(email: String, pass: String): AppResult<Unit>
 
-    suspend fun register(email: String, pass: String): AppResult<Unit>
+    suspend fun register(email: String, pass: String, name: String): AppResult<Unit>
+
+    suspend fun uploadPhoto(uri: String): AppResult<Unit>
 
     fun logout()
 }

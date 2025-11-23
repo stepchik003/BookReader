@@ -58,5 +58,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
 
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.compose.material.icons.extended)
+
 
 }
