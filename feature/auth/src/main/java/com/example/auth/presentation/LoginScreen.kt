@@ -55,7 +55,7 @@ fun LoginScreen(
         viewModel.effect.collect { effect ->
             when (effect) {
                 AuthEffect.NavigateToHome -> onNavigateToHome()
-                is AuthEffect.ShowSnackbar -> snackbarHostState.showSnackbar(effect.message)
+                is AuthEffect.ShowSnackBar -> snackbarHostState.showSnackbar(effect.message)
             }
         }
     }

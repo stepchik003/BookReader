@@ -31,5 +31,5 @@ sealed interface AuthIntent {
 
 sealed interface AuthEffect {
     object NavigateToHome : AuthEffect
-    data class ShowSnackbar(val message: String) : AuthEffect
+    data class ShowSnackBar(val message: String) : AuthEffect
 }

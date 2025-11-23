@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="file_upload_error">Ошибка загрузки файла</string>
+    <string name="title_error">Введите заголовок книги</string>
+    <string name="author_error">Введите автора книги</string>
+    <string name="uploaded">Загружено! URL: %1$s</string>
+    <string name="error">Ошибка: %1$s</string>
+    <string name="bad_extension">Поддерживаются только форматы PDF, EPUB и TXT.</string>
+    <string name="upload_screen_text">Загрузка книги</string>
+    <string name="pick_file">Выбрать файл</string>
+    <string name="book_title">Название книги</string>
+    <string name="author">Автор</string>
+    <string name="uploading">Загрузка... %1$d%%</string>
+    <string name="repeat_uploading">Повторить загрузку</string>
+    <string name="success">Успех</string>
+    <string name="book_successfully_uploaded">Книга успешно загружена!</string>
+    <string name="upload_another_one">Загрузить другую книгу</string>
+    <string name="upload">Загрузить</string>
+    <string name="pick_file_to_upload">Выберите файл (.pdf, .epub, .txt) для загрузки.</string>
+    <string name="user_not_found">Пользователь не найден</string>
+</resources>
