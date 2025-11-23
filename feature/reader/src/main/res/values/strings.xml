@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="read_percent">%1$d%% прочитано</string>
+    <string name="error">Error: %1$s</string>
+    <string name="retry">Повторить</string>
+    <string name="not_successful">Не удалось</string>
+    <string name="deleted_book">Книга удалена</string>
+    <string name="error_deleting">Ошибка удаления</string>
+    <string name="no_path">Нет пути к файлу</string>
+    <string name="downloading_error">Ошибка загрузки: %1$s</string>
+    <string name="only_txt">Возможно открыть только файл txt</string>
+    <string name="system">Системная</string>
+    <string name="dark">Тёмная</string>
+    <string name="light">Светлая</string>
+    <string name="theme">Тема</string>
+    <string name="dense">Плотный</string>
+    <string name="normal">Нормальный</string>
+    <string name="free">Свободный</string>
+    <string name="interval">Интервал строк</string>
+    <string name="font_size">Шрифт</string>
+    <string name="small">Маленький</string>
+    <string name="mid">Средний</string>
+    <string name="big">Большой</string>
+    <string name="settings">Настройки чтения</string>
+</resources>

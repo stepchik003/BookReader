@@ -32,6 +32,7 @@ import com.example.navigation.AppRoute
 import com.example.navigation.AuthRoute
 import com.example.navigation.HomeRoute
 import com.example.navigation.ReaderRoute
+import com.example.reader.presentation.ReaderScreen
 import com.example.upload.presentation.UploadScreen
 
 @Composable
@@ -131,8 +132,8 @@ fun NavGraphBuilder.homeGraph(
                 ) {
 
                     composable<HomeRoute.Books> {
-                        BooksScreen{ id ->
-                            parentNavController.navigate(ReaderRoute.BookReader(id))
+                        BooksScreen{ id, path, title ->
+                            parentNavController.navigate(ReaderRoute.BookReader(id, path, title))
                         }
                     }
 
@@ -168,7 +169,8 @@ fun NavGraphBuilder.readerGraph(
 ) {
     composable<ReaderRoute.BookReader> { entry ->
         val bookId = entry.arguments?.getString("bookId")!!
-        //BookReaderScreen(bookId = bookId)
-        Text("book $bookId")
+        val localPath = entry.arguments?.getString("localPath")!!
+        val bookTitle = entry.arguments?.getString("bookTitle")!!
+        ReaderScreen(bookId, localPath, bookTitle)
     }
 }

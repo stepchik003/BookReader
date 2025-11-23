@@ -34,7 +34,7 @@ sealed interface HomeRoute : AppRoute {
 
 sealed interface ReaderRoute : AppRoute {
     @Serializable
-    data class BookReader(val bookId: String) : ReaderRoute
+    data class BookReader(val bookId: String, val localPath: String, val bookTitle: String) : ReaderRoute
 }
 
 sealed interface ProfileRoute : AppRoute {
