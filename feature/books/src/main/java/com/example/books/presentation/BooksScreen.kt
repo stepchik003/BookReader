@@ -65,7 +65,7 @@ import com.example.domain.util.DownloadStatus
 @Composable
 fun BooksScreen(
     viewModel: BooksViewModel = hiltViewModel(),
-    onBookReadClick: (String) -> Unit
+    onBookReadClick: (String, String, String) -> Unit
 ) {
     val state by viewModel.state.collectAsState()
     val context = LocalContext.current
@@ -131,7 +131,7 @@ fun BooksScreen(
                     }
                     else -> {
                         LazyColumn(state = listState) {
-                            items(state.filteredBooks, key = { it.id }) { book ->
+                            items(state.filteredBooks) { book ->
                                 val status = state.downloadStatus[book.id] ?: DownloadStatus.Idle
 
                                 BookItem(
@@ -139,7 +139,7 @@ fun BooksScreen(
                                     downloadStatus = status,
                                     onDownloadClick = { viewModel.processIntent(BooksIntent.DownloadBook(book)) },
                                     onDeleteClick = { viewModel.processIntent(BooksIntent.DeleteLocalFile(book.id)) },
-                                    onReadClick = { onBookReadClick(book.id) }
+                                    onReadClick = { onBookReadClick(book.id, book.localPath!!, book.title) }
                                 )
                             }
                         }
