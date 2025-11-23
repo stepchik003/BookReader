@@ -42,6 +42,12 @@ android {
     buildFeatures {
         compose = true
     }
+    packaging {
+        resources.excludes += "META-INF/INDEX.LIST"
+        resources.excludes += "META-INF/DEPENDENCIES"
+        resources.excludes += "META-INF/versions/9/module-info.class"
+        resources.excludes += "META-INF/io.netty.versions.properties"
+    }
 }
 
 dependencies {
@@ -71,7 +77,12 @@ dependencies {
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
-    implementation("androidx.hilt:hilt-navigation-compose:1.3.0")
+    implementation(libs.androidx.hilt.navigation.compose)
 
-    implementation("androidx.compose.material:material-icons-extended")
+    implementation(libs.androidx.compose.material.icons.extended)
+
+//    implementation(libs.aws.android.sdk.s3)
+//    implementation(libs.aws.android.sdk.core)
+//    implementation(libs.aws.android.sdk.auth.core)
+//    implementation(libs.aws.android.sdk.mobile.client)
 }
