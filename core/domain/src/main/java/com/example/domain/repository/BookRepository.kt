@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 interface BookRepository {
 
 
-    fun getBooksStream(userId: String): Flow<List<Book>>
+    fun getBooksStream(): Flow<List<Book>>
 
     suspend fun syncRemoteBooks(userId: String)
 
