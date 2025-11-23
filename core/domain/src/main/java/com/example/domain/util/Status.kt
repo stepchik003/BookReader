@@ -7,6 +7,7 @@ sealed class UploadStatus {
 }
 
 sealed interface DownloadStatus {
+    data object Idle: DownloadStatus
     data class Progress(val percent: Int) : DownloadStatus
     data class Success(val localPath: String) : DownloadStatus
     data class Error(val message: String) : DownloadStatus

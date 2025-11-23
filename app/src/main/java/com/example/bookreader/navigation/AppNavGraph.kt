@@ -27,6 +27,7 @@ import com.example.auth.mvi.AuthState
 import com.example.auth.presentation.LoginScreen
 import com.example.auth.viewmodel.AuthViewModel
 import com.example.bookreader.presentation.BookReaderBottomBar
+import com.example.books.presentation.BooksScreen
 import com.example.navigation.AppRoute
 import com.example.navigation.AuthRoute
 import com.example.navigation.HomeRoute
@@ -130,12 +131,9 @@ fun NavGraphBuilder.homeGraph(
                 ) {
 
                     composable<HomeRoute.Books> {
-                        Text("Books")
-//                        Books(
-//                            onBookClick = { id ->
-//                                parentNavController.navigate(ReaderRoute.BookReader(id))
-//                            }
-//                        )
+                        BooksScreen{ id ->
+                            parentNavController.navigate(ReaderRoute.BookReader(id))
+                        }
                     }
 
                     composable<HomeRoute.Upload> {

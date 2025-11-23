@@ -8,10 +8,13 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
@@ -87,7 +90,9 @@ fun UploadScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.upload_screen_text)) }
+                title = { Text(stringResource(R.string.upload_screen_text)) },
+                windowInsets = WindowInsets.safeDrawing.only(androidx.compose.foundation.layout.WindowInsetsSides.Horizontal)
+
             )
         },
         snackbarHost = { SnackbarHost(snackBarHostState) }
@@ -96,10 +101,11 @@ fun UploadScreen(
         Column(
             modifier = Modifier
                 .padding(paddingValues)
-                .padding(16.dp)
+                .padding(horizontal = 16.dp)
                 .fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(Modifier.height(16.dp))
             FileSelectionSection(
                 state = state,
                 onSelectFile = { filePickerLauncher.launch(SUPPORTED_MIME_TYPES) }
@@ -119,25 +125,6 @@ fun UploadScreen(
                 )
             }
 
-//            AnimatedContent(
-//                targetState = state,
-//                modifier = Modifier.fillMaxWidth()
-//            ) { currentState ->
-//                when (currentState) {
-//                    is UploadState.ReadyToUpload -> {
-//                        MetadataAndUploadSection(
-//                            state = currentState,
-//                            viewModel = viewModel
-//                        )
-//                    }
-//                    UploadState.Idle -> {
-//                        Text(
-//                            stringResource(R.string.pick_file_to_upload),
-//                            style = MaterialTheme.typography.bodyLarge
-//                        )
-//                    }
-//                }
-//            }
         }
     }
 }

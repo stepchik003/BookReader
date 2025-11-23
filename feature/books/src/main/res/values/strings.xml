@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="error">Ошибка: %1$s</string>
+    <string name="synced">Синхронизировано!</string>
+    <string name="sync_error">Ошибка синхронизации: %1$s</string>
+    <string name="unknown_sync_error">Неизвестная ошибка синхронизации</string>
+    <string name="book_downloaded">Книга %1$s скачана!</string>
+    <string name="downloading_error">Ошибка загрузки: %1$s</string>
+    <string name="not_downloaded">Не удалось загрузить: %1$s</string>
+    <string name="of_book">книги</string>
+    <string name="file_deleted">Файл %1$s удалён с устройства.</string>
+    <string name="deleting_error">Ошибка при удалении файла.</string>
+    <string name="getting_list_error">Ошибка загрузки списка: %1$s</string>
+    <string name="user_not_found">Пользователь не найден</string>
+    <string name="my_books">Мои Книги</string>
+    <string name="search_books">Поиск книг...</string>
+    <string name="delete">Удалить</string>
+    <string name="download">Скачать</string>
+    <string name="library_empty">Ваша библиотека пуста.</string>
+    <string name="pull_to_refresh">Потяните, чтобы синхронизировать, или загрузите свою первую книгу.</string>
+    <string name="not_found">Ничего не найдено</string>
+    <string name="try_new_search">Попробуйте изменить поисковый запрос.</string>
+    <string name="download_error">Ошибка загрузки:</string>
+    <string name="retry">Повторить</string>
+</resources>
