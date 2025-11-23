@@ -4,11 +4,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -23,6 +21,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.example.auth.mvi.AuthIntent
 import com.example.auth.mvi.AuthState
 import com.example.auth.presentation.LoginScreen
 import com.example.auth.viewmodel.AuthViewModel
@@ -32,6 +31,7 @@ import com.example.navigation.AppRoute
 import com.example.navigation.AuthRoute
 import com.example.navigation.HomeRoute
 import com.example.navigation.ReaderRoute
+import com.example.profile.presentation.ProfileScreen
 import com.example.reader.presentation.ReaderScreen
 import com.example.upload.presentation.UploadScreen
 
@@ -44,12 +44,10 @@ fun AppNavGraph(
 
     val authState by authViewModel.state.collectAsState()
 
-    val startDestination = remember(authState) {
-        when (authState) {
-            is AuthState.Loading -> AppRoute.Loading
-            is AuthState.LoggedIn -> AppRoute.HomeGraph
-            is AuthState.LoggedOut -> AppRoute.AuthGraph
-        }
+    val startDestination = when (authState) {
+        is AuthState.Loading -> LoadingScreen()
+        is AuthState.LoggedIn -> AppRoute.HomeGraph
+        is AuthState.LoggedOut -> AppRoute.AuthGraph
     }
 
 
@@ -61,7 +59,7 @@ fun AppNavGraph(
 
         authGraph(navController, authViewModel, snackBarHostState)
         homeGraph(navController, authViewModel)
-        readerGraph(navController)
+        readerGraph()
     }
 }
 
@@ -87,25 +85,14 @@ fun NavGraphBuilder.authGraph(
         composable<AuthRoute.LoginScreen> {
             LoginScreen(
                 viewModel = authViewModel,
-                onNavigateToRegister = { navController.navigate(AuthRoute.RegisterScreen) },
                 onNavigateToHome = {
                     navController.navigate(AppRoute.HomeGraph) {
                         popUpTo(AppRoute.AuthGraph) { inclusive = true }
                     }
                 },
-                snackbarHostState = snackBarHostState
+                snackBarHostState = snackBarHostState
             )
-        }
 
-        composable<AuthRoute.RegisterScreen> {
-//            RegisterScreen(
-//                onNavigateToLogin = { navController.popBackStack() },
-//                onSignUpComplete = {
-//                    navController.navigate(AppRoute.HomeGraph) {
-//                        popUpTo(AppRoute.AuthGraph) { inclusive = true }
-//                    }
-//                }
-//            )
         }
     }
 }
@@ -132,7 +119,7 @@ fun NavGraphBuilder.homeGraph(
                 ) {
 
                     composable<HomeRoute.Books> {
-                        BooksScreen{ id, path, title ->
+                        BooksScreen { id, path, title ->
                             parentNavController.navigate(ReaderRoute.BookReader(id, path, title))
                         }
                     }
@@ -142,21 +129,12 @@ fun NavGraphBuilder.homeGraph(
                     }
 
                     composable<HomeRoute.Profile> {
-                        Text("Profile")
-                        Button(onClick = {
+                        ProfileScreen {
+                            authViewModel.processIntent(AuthIntent.Logout)
                             parentNavController.navigate(AppRoute.AuthGraph) {
                                 popUpTo(AppRoute.HomeGraph) { inclusive = true }
                             }
-                        }) {
-                            Text("Log Out")
                         }
-//                        Profile(
-//                            onLogout = {
-//                                parentNavController.navigate(AppRoute.AuthGraph) {
-//                                    popUpTo(AppRoute.HomeGraph) { inclusive = true }
-//                                }
-//                            }
-//                        )
                     }
                 }
             }
@@ -164,9 +142,7 @@ fun NavGraphBuilder.homeGraph(
     }
 }
 
-fun NavGraphBuilder.readerGraph(
-    navController: NavController
-) {
+fun NavGraphBuilder.readerGraph() {
     composable<ReaderRoute.BookReader> { entry ->
         val bookId = entry.arguments?.getString("bookId")!!
         val localPath = entry.arguments?.getString("localPath")!!

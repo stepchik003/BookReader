@@ -29,6 +29,8 @@ readiumStreamer = "3.1.2"
 runtime = "1.9.5"
 uiViewbinding = "1.9.5"
 pagingCommon = "3.3.6"
+firebaseAuthCommon = "9.8.0"
+firebaseAuthKtx = "24.0.1"
 
 [libraries]
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }

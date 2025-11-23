@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="registery">Регистрация</string>
+    <string name="login">Вход</string>
+    <string name="name">Имя</string>
+    <string name="email">Email</string>
+    <string name="password">Пароль</string>
+    <string name="incorrect_email">Некорректный формат Email</string>
+    <string name="minimal_pass_length">Пароль должен быть не менее 6 символов</string>
+</resources>

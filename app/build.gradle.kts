@@ -79,6 +79,7 @@ dependencies {
     implementation(project(":feature:upload"))
     implementation(project(":feature:books"))
     implementation(project(":feature:reader"))
+    implementation(project(":feature:profile"))
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)

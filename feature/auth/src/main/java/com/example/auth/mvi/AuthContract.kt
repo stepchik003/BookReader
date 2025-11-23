@@ -9,6 +9,7 @@ sealed class AuthState {
     data class LoggedOut(
         val emailInput: String = "",
         val passwordInput: String = "",
+        val nameInput: String = "",
         val isRegisterMode: Boolean = false,
         val isPasswordVisible: Boolean = false,
         val isLoading: Boolean = false,
@@ -23,10 +24,12 @@ sealed class AuthState {
 sealed interface AuthIntent {
     data class ChangeEmail(val email: String) : AuthIntent
     data class ChangePassword(val pass: String) : AuthIntent
+    data class ChangeName(val name: String) : AuthIntent
     object TogglePasswordVisibility : AuthIntent
     object ToggleMode : AuthIntent
     object SubmitAuth : AuthIntent
     object DismissError : AuthIntent
+    object Logout : AuthIntent
 }
 
 sealed interface AuthEffect {
