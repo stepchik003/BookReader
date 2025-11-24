@@ -3,9 +3,9 @@
 Мобильное приложение для скачивания и чтения книг, реализованное в рамках тестового задания.
 
 ### Демонстрация работы
-<video controls>
+[<video controls>
   <source src="assets/app_demo.mp4" type="video/mp4">
-</video>
+</video>](https://github.com/stepchik003/BookReader/blob/master/assets/app_demo.mp4)
 
 ## Технологический стек
 
