@@ -20,9 +20,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -38,6 +38,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.example.reader.R
 import com.example.reader.mvi.FileType
@@ -45,6 +46,12 @@ import com.example.reader.mvi.ReaderEffect
 import com.example.reader.mvi.ReaderIntent
 import com.example.reader.mvi.ThemeMode
 import com.example.reader.viewmodel.ReaderViewModel
+import com.pratikk.jetpdfvue.HorizontalVueReader
+import com.pratikk.jetpdfvue.state.VueFileType
+import com.pratikk.jetpdfvue.state.VueLoadState
+import com.pratikk.jetpdfvue.state.VueResourceType
+import com.pratikk.jetpdfvue.state.rememberHorizontalVueReaderState
+import java.io.File
 
 @OptIn(ExperimentalReadiumApi::class, ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
@@ -58,9 +65,11 @@ fun ReaderScreen(
     val context = LocalContext.current
 
     LaunchedEffect(Unit) {
+
         viewModel.processIntent(ReaderIntent.LoadContent(localPath))
         viewModel.processIntent(ReaderIntent.LoadInfo(bookId, bookTitle))
     }
+
 
     LaunchedEffect(Unit) {
         viewModel.effect.collect { effect ->
@@ -88,7 +97,7 @@ fun ReaderScreen(
                     title = { Text(state.bookTitle) },
                     actions = {
                         IconButton(onClick = { viewModel.processIntent(ReaderIntent.ToggleSettings) }) {
-                            Text("АА")  // Или Icon
+                            Text("АА")
                         }
                     }
                 )
@@ -105,18 +114,32 @@ fun ReaderScreen(
                 }
             }
         ) { padding ->
-            Box(Modifier
-                .padding(padding)
-                .fillMaxSize()) {
+            Box(
+                Modifier
+                    .padding(padding)
+                    .fillMaxSize()
+            ) {
                 if (state.isLoading) {
                     CircularProgressIndicator(Modifier.align(Alignment.Center))
                 } else if (state.error != null) {
-                    Column(Modifier.align(Alignment.Center), horizontalAlignment = Alignment.CenterHorizontally) {
-                        Text(stringResource(R.string.error, state.error!!), color = MaterialTheme.colorScheme.error)
-                        Button(onClick = { viewModel.processIntent(ReaderIntent.Retry) }) { Text(
-                            stringResource(R.string.retry)
-                        ) }
-                        Button(onClick = { viewModel.processIntent(ReaderIntent.DeleteBook) }) { Text("Удалить") }
+                    Column(
+                        Modifier.align(Alignment.Center),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            stringResource(R.string.error, state.error!!),
+                            color = MaterialTheme.colorScheme.error
+                        )
+                        Button(onClick = { viewModel.processIntent(ReaderIntent.Retry) }) {
+                            Text(
+                                stringResource(R.string.retry)
+                            )
+                        }
+                        Button(onClick = { viewModel.processIntent(ReaderIntent.DeleteBook) }) {
+                            Text(
+                                stringResource(R.string.delete)
+                            )
+                        }
                     }
                 } else {
                     when (state.fileType) {
@@ -140,7 +163,33 @@ fun ReaderScreen(
                                 }
                             }
                         }
+
                         FileType.PDF -> {
+                            val horizontalVueReaderState = rememberHorizontalVueReaderState(
+                                resource = VueResourceType.Local(
+                                    uri = File(state.localPath!!).toUri(),
+                                    fileType = VueFileType.PDF
+                                )
+                            )
+                            val loadState = horizontalVueReaderState.vueLoadState
+                            when (loadState) {
+                                is VueLoadState.DocumentError -> {
+                                }
+                                VueLoadState.DocumentImporting -> {
+                                }
+                                VueLoadState.DocumentLoaded -> {
+                                    HorizontalVueReader(
+                                        modifier = Modifier.fillMaxSize(),
+                                        contentModifier = Modifier,
+                                        horizontalVueReaderState = horizontalVueReaderState
+                                    )
+                                }
+                                VueLoadState.DocumentLoading -> {
+                                }
+                                VueLoadState.NoDocument -> {
+                                }
+
+                            }
 //                            PdfVue(
 //                                file = File(localPath),
 //                                initialPage = state.position,
@@ -151,8 +200,16 @@ fun ReaderScreen(
 //                                modifier = Modifier.fillMaxSize()
 //                            )
                         }
-                        FileType.EPUB -> Text("EPUB не поддерживается", Modifier.align(Alignment.Center))
-                        FileType.UNKNOWN -> Text("Неизвестный формат", Modifier.align(Alignment.Center))
+
+                        FileType.EPUB -> Text(
+                            "EPUB не поддерживается",
+                            Modifier.align(Alignment.Center)
+                        )
+
+                        FileType.UNKNOWN -> Text(
+                            "Неизвестный формат",
+                            Modifier.align(Alignment.Center)
+                        )
                     }
                 }
             }
@@ -166,8 +223,11 @@ fun ReaderScreen(
                         .padding(16.dp)
                         .fillMaxWidth()
                 ) {
-                    Text(stringResource(R.string.settings), style = MaterialTheme.typography.titleLarge)
-                    Divider(Modifier.padding(vertical = 8.dp))
+                    Text(
+                        stringResource(R.string.settings),
+                        style = MaterialTheme.typography.titleLarge
+                    )
+                    HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
                     SettingsRow(title = stringResource(R.string.font_size)) {
                         FilterChip(

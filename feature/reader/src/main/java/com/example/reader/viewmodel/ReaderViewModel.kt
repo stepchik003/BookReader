@@ -58,6 +58,10 @@ class ReaderViewModel @Inject constructor(
             is ReaderIntent.LoadContent -> {
                 _state.value = currentState.copy(isLoading = true, error = null, localPath = intent.localPath, lines = emptyList())
                 val fileType = determineFileType(intent.localPath)
+                if (fileType == FileType.PDF){
+                    _state.update { it.copy(isLoading = false, fileType = fileType) }
+                    return
+                }
                 val position = repository.getReadingPosition(currentState.bookId)
                 val total = if (fileType == FileType.TXT) estimateTotalLines(intent.localPath) else 1
                 val linesResult = if (fileType == FileType.TXT) repository.loadBookLines(intent.localPath) else AppResult.Error(
