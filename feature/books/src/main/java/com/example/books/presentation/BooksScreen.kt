@@ -52,6 +52,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.books.R
@@ -242,7 +243,7 @@ fun EmptyLibraryPlaceholder() {
         Icon(Icons.AutoMirrored.Filled.MenuBook, contentDescription = null, modifier = Modifier.size(64.dp), tint = Color.Gray)
         Spacer(Modifier.height(16.dp))
         Text(stringResource(R.string.library_empty), style = MaterialTheme.typography.titleLarge)
-        Text(stringResource(R.string.pull_to_refresh), color = Color.Gray)
+        Text(stringResource(R.string.pull_to_refresh), color = Color.Gray, textAlign = TextAlign.Center)
     }
 }
 

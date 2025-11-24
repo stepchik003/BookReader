@@ -70,7 +70,7 @@ dependencies {
     implementation(libs.androidx.fragment.ktx)
     implementation(libs.androidx.compose.ui.viewbinding)
 
-    implementation("androidx.paging:paging-compose:3.3.2")
+    implementation("com.github.pratikksahu:JetPDFVue:1.0.7")
 
 
 }
